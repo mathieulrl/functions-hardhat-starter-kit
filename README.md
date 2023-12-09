@@ -28,22 +28,37 @@
 - [Gas Spikes](#gas-spikes)
 - [Troubleshooting](#troubleshooting)
 
-# Overview
 
-<p>Chainlink Functions allows users to request data from HTTP(s) APIs and perform custom computation using JavaScript.
-It works by executing the request on a <a href="https://chain.link/education/blockchain-oracles#decentralized-oracles">decentralized oracle network</a> (DON).
-When a request is initiated, each node in the DON executes the user-provided JavaScript code simultaneously.  Then, nodes use the <a href="https://docs.chain.link/architecture-overview/off-chain-reporting/">Chainlink OCR</a> protocol to come to consensus on the results.  Finally, the median result is returned to the requesting contract via a callback function.
-<p>Chainlink Functions also enables users to securely share secrets with the DON, allowing users to access APIs that require authentication without exposing their API keys. Secrets are encrypted with threshold public key cryptography, requiring multiple nodes to participate in a decentralized decryption process such that no node can decrypt secrets without consensus from the rest of the DON.</p>
 
-Nodes are compensated in LINK via a subscription billing model. You can see billing details [here](https://docs.chain.link/chainlink-functions/resources/subscriptions) and pricing for each network [here](https://docs.chain.link/chainlink-functions/supported-networks).
 
-<p><b>Working with Chainlink Functions requires accepting the terms of service before you are able to create a subscription. Please visit <a href="https://functions.chain.link/">chain.link/functions</a>.</b></p>
 
-# Motivation
 
-This repo provides developers with a "works out of the box" experience as it comes preconfigured with dependencies and popular tooling like [Hardhat](https://hardhat.org). This is not a tutorial for the Hardhat toolchain. It assumes basic familiarity with Hardhat and the command line. We use HardHat CLI scripts to run Chainlink Functions commands and operations.
 
-In order to set up your own project which uses Chainlink Functions, please refer to the [Functions Toolkit NPM package](https://www.npmjs.com/package/@chainlink/functions-toolkit).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Supported Networks
 
@@ -58,20 +73,6 @@ In order to set up your own project which uses Chainlink Functions, please refer
 - Ethereum Sepolia: `ETHEREUM_SEPOLIA_RPC_URL`, `--network ethereumSepolia`
 - Polygon Mumbai: `POLYGON_MUMBAI_RPC_URL`, `--network polygonMumbai`
 - Avalanche Fuji: `AVALANCHE_FUJI_RPC_URL`, `--network avalancheFuji`
-
-# For Beginners
-
-If you're new to web3, it is recommended starting with the [Functions - Getting Started](https://docs.chain.link/chainlink-functions/getting-started/) guide before diving into the code.
-
-The above document will help you:
-
-- Set up a wallet
-- Get funds
-- Provides more detailed step-by-step instructions and further information
-
-## Tutorials & examples
-
-For other detailed tutorials and examples, check out the [Chainlink Functions Tutorials](https://docs.chain.link/chainlink-functions/tutorials/) to get started.
 
 # Quickstart
 
@@ -223,16 +224,6 @@ Chainlink Functions requests can be configured by modifying values in the `reque
 | `args`               | This is an array of strings which contains values that are injected into the JavaScript source code and can be accessed using the name `args`. This provides a convenient way to set modifiable parameters within a request. If no arguments, then an empty array is passed.                                           |
 | `expectedReturnType` | This specifies the expected return type of a request. It has no on-chain impact, but is used by the CLI to decode the response bytes into the specified type. The options are `uint256`, `int256`, `string`, or `bytes`.                                                                                               |
 
-## JavaScript Code
-
-The JavaScript source code for a Functions request can use any valid [Deno](https://deno.land/manual@v1.36.4/introduction) JavaScript, but _cannot_ use any imported modules.
-
-The code must return a [Uint8Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array) which represents the response bytes that are sent back to the requesting contract.
-Encoding functions are provided in the [Functions library](#functions-library).
-Additionally, any external APIs to which requests are made must script must respond in **less than 9 seconds** and the JavaScript Code as a whole must return in **less than 10 seconds** or it will be terminated and send back an error (in bytes) to the requesting contract.
-
-In order to make HTTP requests, the source code must use the `Functions.makeHttpRequest` function from the exposed [Functions library](#functions-library).
-Asynchronous code with top-level `await` statements is supported, as shown in the file _API-request-example.js_.
 
 ### Functions Library
 
@@ -285,11 +276,6 @@ This library also exposes functions for encoding JavaScript values into Uint8Arr
 
 Remember, it is not required to use these encoding functions. The JavaScript code must only return a [Uint8Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array) which represents the `bytes` that are returned on-chain.
 
-## Modifying Contracts
-
-Consumer contracts which initiate a request and receive a fulfillment can be modified for specific use cases. The only requirements are that the contract successfully calls `sendRequest` in the `FunctionsRouter`,
-and that it correctly implements the `fulfillRequest` function which is called by `handleOracleFulfillment` in the inherited `FunctionsClient` contract (See _FunctionsClient.sol_ for details).</br>
-At this time, the maximum amount of gas that _handleOracleFulfillment_ can use is 300,000 (please contact Chainlink Labs if you require a higher callback gas limit).
 
 ## Local Simulations with the `localFunctionsTestnet`
 
@@ -311,39 +297,3 @@ This project uses DONHosted secrets by default, which means secrets from the `Fu
 
 The CLI command to upload secrets to the DON is `npx hardhat functions-upload-secrets-don --slotid _0_or_higher --network network_name --ttl minutes_until_expired`.
 
-# Automation Integration
-
-Chainlink Functions can be used with [Chainlink Automation](https://docs.chain.link/chainlink-automation/introduction) in order to automatically trigger a Functions as specified intervals.
-
-1. Create & fund a new Functions billing subscription by running `npx hardhat functions-sub-create --network network_name_here --amount LINK_funding_amount_here`<br>**Note**: Ensure your wallet has a sufficient LINK balance before running this command.<br><br>
-
-2. Deploy the `AutomationFunctionsConsumer` contract by running `npx hardhat functions-deploy-auto-consumer --subid subscription_id_number_here --verify true --network network_name_here`<br>**Note**: Make sure `<blockexplorer>_API_KEY` environment variable is set when using `--verify true`.
-
-   - This step will automatically add your consumer contract as an authorized user of your subscription. You can verify by running `npm functions-sub-info --network network_name_here --subid subscription_id_number_here`.
-
-3. Encode the request parameters into CBOR and store it on chain with `npx hardhat functions-set-auto-request --network network_name_here  --subid subscription_id_number_here --interval automation-call-interval --slotid don_hosted_secret_slotId --ttl minutes_until_secrets_expiry --contract 0x_contract_address`<br>
-
-> DON-Hosted secrets and expire after the specified `ttl` (which defaults to 10 minutes if no `ttl` is specified). If a request is sent after the `ttl` has expired, you will see error bytes returned to your consumer contract.
-
-1. Register the `AutomationFunctionsConsumer` contract for upkeep via the Chainlink Automation web app here: [https://automation.chain.link/](https://automation.chain.link/). This example uses a "Custom Logic" Automation.
-   - Be sure to set the `Gas limit` for the `performUpkeep` function to a high enough value. The recommended value is 1,000,000.
-   - Once created, ensure the Automation upkeep has sufficient funds. You can add funds, pause or cancel the upkeep in the web app.
-   - Find further documentation for working with Chainlink Automation here: [https://docs.chain.link/chainlink-automation/introduction](https://docs.chain.link/chainlink-automation/introduction)
-
-Once the contract is registered for upkeep, check the latest response or error with the commands `npx hardhat functions-read --network network_name_here --contract 0x_contract_address`.
-
-1. For debugging on your machine, use the command `npx hardhat functions-check-upkeep --network network_name_here --contract contract_address_here` to see if Automation needs to call `performUpkeep`. If this call returns `false` then the upkeep interval has not yet passed and `performUpkeep` will not execute. In order to test that `performUpkeep` will run correctly before registering the Automation upkeep, you can also trigger a request manually using the command `npx hardhat functions-perform-upkeep --network network_name_here --contract contract_address_here`
-
-You can also attach a listener to a Subscription ID by updating the `subId` variable in `/scripts/listen.js`, and then running `npm run listen --network your_network_name` from the repo root in a new terminal so that it can keep listening as you develop. This script uses nodemon which restarts the script when you save files or when the listener returns a result.
-
-# Gas Spikes
-
-When on-chain traffic is high, transaction gas prices can spike unexpectedly. This may decrease the accuracy of the estimated requests costs or cause transactions to fail.
-In order to mitigate these problems, ensure your Functions subscription balance has a sufficient buffer of two or more times the expected request cost in LINK.
-Additionally, you can manually set a hardcoded transaction gas price in the HardHat tooling by modifying the `gasPrice` parameter in the _networks.js_ config file for a particular network.
-
-# Troubleshooting
-
-1. When running Chainlink Functions make sure your subscription ID has your consumer contract added as an authorized consumer. Also make sure that your subscription has enough LINK balance. You do this by calling `npx hardhat functions-sub-info --network network_name_here --subid subscription_id_here`
-
-2. When running Chainlink Functions with Automation you also need to ensure the Chainlink Automation upkeeps are funded to run the automation calls. The fastest way to maintain your Automation LINK subscription balance is through the Chainlink Automation web app here: [https://automation.chain.link/](https://automation.chain.link/)
