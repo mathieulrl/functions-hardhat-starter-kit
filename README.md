@@ -85,7 +85,7 @@ We created the <b>Functions Consumer</b> smart contract, which calls ChatGPT whe
   When I took a closer look, I got the impression that hardhat was changing the subscription number I'd given it when I requested my smart contract.
   Line command : `npx hardhat functions-request --network network_name_here --contract 0xDeployed_client_contract_address_here --subid subscription_id_number_here`
 
-  - Then we used the latest version of Hardhat Starter Kit, but this time we got the "" error when simulating a request to the Functions Consumer smart contract. Then we always got an error when we tried to make a real request, without being able to tell whether it was coming from OpenAI or Functions. 
+  - Then we used the latest version of Hardhat Starter Kit, but this time we got the "Error during simulation:  syntax error, RAM exceeded, or other error" error when simulating a request to the Functions Consumer smart contract. Then we always got an error when we tried to make a real request, without being able to tell whether it was coming from OpenAI or Functions. 
 
   - Finally, we wrote the request.js and source.js ourselves, using this tutorial: https://docs.chain.link/chainlink-functions/tutorials/api-query-parameters. Here, we were able to deploy, create the subscription and make the request. On the Chainlink Functions site, we were able to find the transactions for the requests we made. However, we kept getting an error from ChatGPT, without knowing exactly what it was. 
   However, we tried making requests to other APIs via Functions, which worked all the time, and we also made requests to the local OpenAI API, which also worked.
