@@ -7,9 +7,7 @@ Here we'll focus on the part dealing with enigma creation and checking whether a
 <p>For that, we use Chainlink Functions in order to request an enigma and its answer from OpenAI API. 
 We created the <b>Functions Consumer</b> smart contract, which calls ChatGPT when asked with the <b>sendRequest</b> function, stores the enigma, and checks whether a player has found the answer to the enigma or not. 
 </p>
-Nodes are compensated in LINK via a subscription billing model. You can see billing details [here](https://docs.chain.link/chainlink-functions/resources/subscriptions) and pricing for each network [here](https://docs.chain.link/chainlink-functions/supported-networks).
 
-<p><b>Working with Chainlink Functions requires accepting the terms of service before you are able to create a subscription. Please visit <a href="https://functions.chain.link/">chain.link/functions</a>.</b></p>
 
 
 ## Table of Contents 📑
