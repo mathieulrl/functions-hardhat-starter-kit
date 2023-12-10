@@ -16,16 +16,16 @@ require("@chainlink/env-enc").config();
 const consumerAddress = "0xcd8497C7ca801163E866B6c81416D45c522BAe17"; // REPLACE this with your Functions consumer address
 const subscriptionId = 1875; // REPLACE this with your subscription ID
 
-const makeRequestMumbai = async () => {
-  // hardcoded for Polygon Mumbai
-  const routerAddress = "0x6E2dc0F9DB014aE19888F539E59285D2Ea04244C";
+const makeRequestFuji = async () => {
+  // hardcoded for Polygon Fuji
+  const routerAddress = "0xA9d587a00A31A52Ed70D6026794a8FC5E2F5dCb0";
   const linkTokenAddress = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
-  const donId = "fun-polygon-mumbai-1";
+  const donId = "fun-avalanche-fuji-1";
   const gatewayUrls = [
     "https://01.functions-gateway.testnet.chain.link/",
     "https://02.functions-gateway.testnet.chain.link/",
   ];
-  const explorerUrl = "https://mumbai.polygonscan.com";
+  const explorerUrl = "https://testnet.avascan.info/";
 
   // Initialize functions settings
   const source = fs
@@ -46,7 +46,7 @@ const makeRequestMumbai = async () => {
       "private key not provided - check your environment variables"
     );
 
-  const rpcUrl = process.env.POLYGON_MUMBAI_RPC_URL; // fetch mumbai RPC URL
+  const rpcUrl = process.env.AVALANCHE_FUJI_RPC_URL; // fetch fuji RPC URL
 
   if (!rpcUrl)
     throw new Error(`rpcUrl not provided  - check your environment variables`);
@@ -245,7 +245,7 @@ const makeRequestMumbai = async () => {
   })();
 };
 
-makeRequestMumbai().catch((e) => {
+makeRequestFuji().catch((e) => {
   console.error(e);
   process.exit(1);
 });
