@@ -1,47 +1,36 @@
-// This example shows how to make call an API using a secret
-// https://coinmarketcap.com/api/documentation/v1/
-
-// Arguments can be provided when a request is initated on-chain and used in the request source code as shown below
-const coinMarketCapCoinId = args[0];
-const currencyCode = args[1];
+const prompt = args[0]
 
 if (!secrets.apiKey) {
-  throw Error(
-    "COINMARKETCAP_API_KEY environment variable not set for CoinMarketCap API.  Get a free key from https://coinmarketcap.com/api/"
-  );
+  throw Error("Need to set OPENAI_KEY environment variable")
 }
 
-// build HTTP request object
 
-const coinMarketCapRequest = Functions.makeHttpRequest({
-  url: `https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest`,
-  // Get a free API key from https://coinmarketcap.com/api/
+// example request:
+// curl https://api.openai.com/v1/completions -H "Content-Type: application/json" -H "Authorization: Bearer YOUR_API_KEY" -d '{"model": "text-davinci-003", "prompt": "Say this is a test", "temperature": 0, "max_tokens": 7}
+
+// example response:
+// {"id":"cmpl-6jFdLbY08kJobPRfCZL4SVzQ6eidJ","object":"text_completion","created":1676242875,"model":"text-davinci-003","choices":[{"text":"\n\nThis is indeed a test","index":0,"logprobs":null,"finish_reason":"length"}],"usage":{"prompt_tokens":5,"completion_tokens":7,"total_tokens":12}}
+const openAIRequest = Functions.makeHttpRequest({
+  url: "https://api.openai.com/v1/completions",
+  method: "POST",
   headers: {
-    "Content-Type": "application/json",
-    "X-CMC_PRO_API_KEY": secrets.apiKey,
+    Authorization: `Bearer ${secrets.apiKey}`,
   },
-  params: {
-    convert: currencyCode,
-    id: coinMarketCapCoinId,
-  },
-});
+  data: { model: "text-davinci-001", prompt: prompt, temperature: 1, max_tokens: 15 },
+})
 
-// Make the HTTP request
-const coinMarketCapResponse = await coinMarketCapRequest;
+const [openAiResponse] = await Promise.all([openAIRequest])
 
-if (coinMarketCapResponse.error) {
-  throw new Error("CoinMarketCap Error");
+if (openAiResponse.error) {
+  throw new Error(openAiResponse.error);
 }
 
-// fetch the price
-const price =
-  coinMarketCapResponse.data.data[coinMarketCapCoinId]["quote"][currencyCode][
-    "price"
-  ];
+const response = openAiResponse.data.choices[0].text;
 
-console.log(`Price: ${price.toFixed(2)} ${currencyCode}`);
 
-// price * 100 to move by 2 decimals (Solidity doesn't support decimals)
-// Math.round() to round to the nearest integer
-// Functions.encodeUint256() helper function to encode the result from uint256 to bytes
-return Functions.encodeUint256(Math.round(price * 100));
+return Functions.encodeString(response);
+
+
+
+
+
