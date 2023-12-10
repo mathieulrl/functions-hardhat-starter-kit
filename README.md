@@ -105,18 +105,15 @@ Nodes are compensated in LINK via a subscription billing model. You can see bill
 ## Code Reference:
 Explore key functionalities in our code:
 
-
-
-
-- **Chainlink Integrations**:
-  - [**Chainlink Functions**](https://github.com/mathieulrl/functions-hardhat-starter-kit): Repository containing Enigma's Chainlink Function calls, including interactions with ChatGPT API.
     - Please note: The Functions functionality is currently experiencing issues due to the OpenAI API. We are actively working to resolve these problems.
 
 - **Core Smart Contract Features**:
-  - [**Functions**](https://github.com/MarcBTHT/Denigma/blob/main/src/dNFT.sol#L145): Overview of the main functions in our smart contract.
-  - [**Buy and Sell Token Logic**](https://github.com/MarcBTHT/Denigma/blob/main/src/dNFT.sol#L195): Detailed implementation of buy and sell token functionalities.
-  - [**Update dNFT**](https://github.com/MarcBTHT/Denigma/blob/main/src/dNFT.sol#L256): Code for updating dNFT.
-  - [**Metadata Implementation**](https://github.com/MarcBTHT/Denigma/blob/main/src/dNFT.sol#L413): Metadata functionalities in our contract.
+  - [**Functions Consumer Contract**](https://github.com/mathieulrl/functions-hardhat-starter-kit/blob/main/contracts/FunctionsConsumer.sol): MVP Smart Contract for sending requests to ChatGPT, and verifying if a player has found the answer.
+  - [**Improved Functions Consumer Contract**](https://github.com/mathieulrl/functions-hardhat-starter-kit/blob/main/contracts/improvedFunctionsConsumer.sol): Smart Contract for sending requests to ChatGPT, and verifying if a player has found the answer (including public key generation and signature verification, explained before)
+  - [**Request generator v1**](https://github.com/mathieulrl/functions-hardhat-starter-kit/blob/main/Functions-request-config.js): Initial code used for interacting with Functions Consumer Smart Contract
+  - [**Request generator v2**](https://github.com/mathieulrl/functions-hardhat-starter-kit/blob/main/other_sources_and_requests/request.js): Code used for interacting with Functions Consumer Smart Contract, after it didn't work with the Functions-request-config.js one.
+  -  [**Source.js**](https://github.com/mathieulrl/functions-hardhat-starter-kit/blob/main/other_sources_and_requests/source.js): Code used for creating the HTTP request to OpenAI.
+ 
 
 
  
