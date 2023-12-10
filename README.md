@@ -48,7 +48,7 @@ Nodes are compensated in LINK via a subscription billing model. You can see bill
 ## Product 🛠️
 
 ### Diagram:
-![image](https://github.com/MarcBTHT/Denigma/assets/116173196/e4cada7d-26d2-4563-a3c5-12c8dd3a5bf5)
+![image](https://github.com/MarcBTHT/Denigma/assets/116173196/cdece12e-6e44-41c6-9472-1df3d2ef82a8)
 
 
 
@@ -70,7 +70,7 @@ Nodes are compensated in LINK via a subscription billing model. You can see bill
 
 3) Management of the enigma and players :
   
-  -When a player wants to try and find the answer to an enigma :
+  - When a player wants to try and find the answer to an enigma :
     1) he enters his answer on the website
     2) the player answer is hashed (= private key of the answer)
     3) a signature is created with this private key
@@ -81,19 +81,19 @@ Nodes are compensated in LINK via a subscription billing model. You can see bill
 
 ## Challenges we ran into 📜 :
 
-- <br>Problèmes rencontrés avec Chainlink Functions et [**Hardhat Starter Kit**](https://github.com/smartcontractkit/hardhat-starter-kit): </br>
-  - Nous avons d'abord utilisé une version de ce repo github d'il y a 6 mois, pour suivre le tutoriel de Chainlink pour faire une requête API à ChatGPT.
-  Lorsque nous faisions `npx hardhat-functions simulate`, la simulation se faisait parfaitement. Mais lorsque nous faisions une vraie requête à notre smart contract, nous avions une erreur disant que le smart contract n'avait pas de subscription à Functions, ce qui était faux. 
-  Quand j'ai regardé plus en détail, j'ai eu l'impression que hardhat changeait le numéro de subscription que je lui avait donné lors de ma requête à mon smart contract.
-  Commande utilisée : `npx hardhat functions-request --network network_name_here --contract 0xDeployed_client_contract_address_here --subid subscription_id_number_here`
+- <br>Issues encountered with Chainlink Functions and [**Hardhat Starter Kit**](https://github.com/smartcontractkit/hardhat-starter-kit): </br>
+  - We first used a version of this github repo from 6 months ago, to follow Chainlink's tutorial for making an API request to ChatGPT.
+  When we did `npx hardhat-functions simulate`, the simulation worked perfectly. But when we made a real request to our smart contract, we got an error saying that the smart contract had no subscription to Functions, which was wrong. 
+  When I took a closer look, I got the impression that hardhat was changing the subscription number I'd given it when I requested my smart contract.
+  Line command : `npx hardhat functions-request --network network_name_here --contract 0xDeployed_client_contract_address_here --subid subscription_id_number_here`
 
-  - Ensuite, nous avons utilisé la dernière version de Hardhat Starter Kit, mais cette fois-ci, nous avions l'erreur " " lors de la simulation d'une request au smart contract Functions Consumer. Ensuite, nous avions toujours une erreur lorsque nous voulions faire une vraie request, sans pouvoir savoir si ça venait de OpenAI, ou de Functions. 
+  - Then we used the latest version of Hardhat Starter Kit, but this time we got the "" error when simulating a request to the Functions Consumer smart contract. Then we always got an error when we tried to make a real request, without being able to tell whether it was coming from OpenAI or Functions. 
 
-  - Enfin, nous avons rédigé nous même le request.js et le source.js en passant par ce tutoriel : https://docs.chain.link/chainlink-functions/tutorials/api-query-parameters. Ici, nous avons pu déployer, créer la subscription et faire la request. Sur le site de Chainlink Functions, nous pouvions bien retrouver les transactions des requests que nous faisions. Cependant, nous avions toujours une erreur venant de ChatGPT, sans la connaitre plus précisément. 
-  Pourtant, nous avons essayé de faire des requests à d'autres APIs par Functions, cela marchait tout le temps, et nous avons aussi fait des requests à OpenAI API en local, celles-ci marchaient aussi.
+  - Finally, we wrote the request.js and source.js ourselves, using this tutorial: https://docs.chain.link/chainlink-functions/tutorials/api-query-parameters. Here, we were able to deploy, create the subscription and make the request. On the Chainlink Functions site, we were able to find the transactions for the requests we made. However, we kept getting an error from ChatGPT, without knowing exactly what it was. 
+  However, we tried making requests to other APIs via Functions, which worked all the time, and we also made requests to the local OpenAI API, which also worked.
 
-  - C'est pourquoi, dans cette MVP, nous faisons les requests à ChatGPT en local pour l'instant, et l'owner du smart contract Functions Consumer rentre à la main des variables enigma et answer. 
-  - De plus, nous n'avons pas réussi à faire fonctionner le smart contract qui permet de générer une clé publique à partir de l'answer, et de voir si la signature générée par un joueur correspond à cette clé publique. C'est pourquoi, pour l'instant, le smart contract de la MVP hash juste answer, et compare ce hash avec un hash de la réponse du joueur.
+  - That's why, in this MVP, we're making the requests to ChatGPT locally for now, and the owner of the Functions Consumer smart contract is manually entering the enigma and answer variables. 
+  - Moreover, we haven't managed to get the smart contract to generate a public key from the answer, and see whether the signature generated by a player matches that public key. This is why, for the time being, the MVP smart contract just hashes answer, and compares this hash with a hash of the player's answer.
 
 
 
@@ -108,24 +108,9 @@ Explore key functionalities in our code:
 
 
 
-
-
-
-
-
-
-
-
 - **Chainlink Integrations**:
-  - [**Chainlink Automation**](https://github.com/MarcBTHT/Denigma/blob/main/src/dNFT.sol#L319): Implementation details in our code base.
-  - [**Chainlink VRF**](https://github.com/MarcBTHT/Denigma/blob/main/src/dNFT.sol#L360): Integration of Chainlink VRF.
-  - [**Chainlink Data Feed**](https://github.com/MarcBTHT/Denigma/blob/main/src/dNFT.sol#L400): Chainlink Data Feed integration.
   - [**Chainlink Functions**](https://github.com/mathieulrl/functions-hardhat-starter-kit): Repository containing Enigma's Chainlink Function calls, including interactions with ChatGPT API.
-  - **Chainlink CCIP**:
-    - [**Receiver Contract**](https://github.com/MarcBTHT/Denigma/blob/main/src/CCIP/dNFT.sol#L441): CCIP receiver implementation in our smart contract.
-    - [**Receiver Contract Additional Code**](https://github.com/MarcBTHT/Denigma/blob/main/src/CCIP/dNFT.sol#L336): Update dNft state. 
-    - [**Sender Contract**](https://github.com/MarcBTHT/Denigma/blob/main/src/CCIP/Sender.sol#L35): Implementation of the CCIP sender smart contract.
-    - Please note: The CCIP functionality is currently experiencing issues, particularly with data transmission to the receiver contract. We are actively working to resolve these problems.
+    - Please note: The Functions functionality is currently experiencing issues due to the OpenAI API. We are actively working to resolve these problems.
 
 - **Core Smart Contract Features**:
   - [**Functions**](https://github.com/MarcBTHT/Denigma/blob/main/src/dNFT.sol#L145): Overview of the main functions in our smart contract.
@@ -133,11 +118,7 @@ Explore key functionalities in our code:
   - [**Update dNFT**](https://github.com/MarcBTHT/Denigma/blob/main/src/dNFT.sol#L256): Code for updating dNFT.
   - [**Metadata Implementation**](https://github.com/MarcBTHT/Denigma/blob/main/src/dNFT.sol#L413): Metadata functionalities in our contract.
 
-- **Core Smart Contract Features**:
-  - [**Functions**](https://github.com/MarcBTHT/Denigma/blob/main/src/dNFT.sol#L145): Overview of the main functions in our smart contract.
-  - [**Buy and Sell Token Logic**](https://github.com/MarcBTHT/Denigma/blob/main/src/dNFT.sol#L195): Detailed implementation of buy and sell token functionalities.
-  - [**Update dNFT**](https://github.com/MarcBTHT/Denigma/blob/main/src/dNFT.sol#L256): Code for updating dNFT.
-  - [**Metadata Implementation**](https://github.com/MarcBTHT/Denigma/blob/main/src/dNFT.sol#L413): Metadata functionalities in our contract.
+
  
  
 ### Deployment Strategy
@@ -145,18 +126,7 @@ Explore key functionalities in our code:
 - We chose the Avalanche network for deploying our smart contracts due to its rapid transaction processing and lower costs. This choice enhances the efficiency and accessibility of our platform.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+# Quickstart
 
 
 ## Supported Networks
@@ -173,7 +143,6 @@ Explore key functionalities in our code:
 - Polygon Mumbai: `POLYGON_MUMBAI_RPC_URL`, `--network polygonMumbai`
 - Avalanche Fuji: `AVALANCHE_FUJI_RPC_URL`, `--network avalancheFuji`
 
-# Quickstart
 
 ## Requirements
 
