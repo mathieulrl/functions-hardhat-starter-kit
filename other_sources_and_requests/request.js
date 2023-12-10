@@ -13,8 +13,8 @@ const functionsConsumerAbi = require("../../abi/functionsClient.json");
 const ethers = require("ethers");
 require("@chainlink/env-enc").config();
 
-const consumerAddress = "0x747e4d6f25f89e6799f18e5d44bb5b08f0481195"; // REPLACE this with your Functions consumer address
-const subscriptionId = 1098; // REPLACE this with your subscription ID
+const consumerAddress = "0xcd8497C7ca801163E866B6c81416D45c522BAe17"; // REPLACE this with your Functions consumer address
+const subscriptionId = 1875; // REPLACE this with your subscription ID
 
 const makeRequestMumbai = async () => {
   // hardcoded for Polygon Mumbai
@@ -29,10 +29,11 @@ const makeRequestMumbai = async () => {
 
   // Initialize functions settings
   const source = fs
-    .readFileSync(path.resolve(__dirname, "2source.js"))
+    .readFileSync(path.resolve(__dirname, "source.js"))
     .toString();
 
-  const args = ["Say Hello in 2 words"];
+  const args = ["Give me a difficult riddle in two sentences, to solve in at most 3 words (your answer should be 25 words long or less). Give also the answer."];
+  
   const secrets = { apiKey: process.env.OPEN_AI_API_KEY ?? "" };
   const slotIdNumber = 0; // slot ID where to upload the secrets
   const expirationTimeMinutes = 15; // expiration time in minutes of the secrets
@@ -71,7 +72,7 @@ const makeRequestMumbai = async () => {
   if (errorString) {
     console.log(`❌ Error during simulation: `, errorString);
   } else {
-    const returnType = ReturnType.uint256;
+    const returnType = ReturnType.string;
     const responseBytesHexstring = response.responseBytesHexstring;
     if (ethers.utils.arrayify(responseBytesHexstring).length > 0) {
       const decodedResponse = decodeResult(
@@ -230,10 +231,10 @@ const makeRequestMumbai = async () => {
         if (ethers.utils.arrayify(responseBytesHexstring).length > 0) {
           const decodedResponse = decodeResult(
             response.responseBytesHexstring,
-            ReturnType.uint256
+            ReturnType.string
           );
           console.log(
-            `\n✅ Decoded response to ${ReturnType.uint256}: `,
+            `\n✅ Decoded response to ${ReturnType.string}: `,
             decodedResponse
           );
         }
