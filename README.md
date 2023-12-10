@@ -13,14 +13,14 @@ Nodes are compensated in LINK via a subscription billing model. You can see bill
 
 
 ## Table of Contents 📑
-- [Product](#product)
-- [Challenges we ran into](#challenges-we-ran-into)
+- [Product](#[product](#product-%EF%B8%8F)
+- [Challenges we ran into](##challenges-we-ran-into--) 
 - [WebSite](#website)
 - [Code Reference](#code-reference)
-- [Supported Networks](#supported-networks)
-  - [Mainnets](#mainnets)
-  - [Testnets](#testnets)
 - [Quickstart](#quickstart)
+  - [Supported Networks](#supported-networks)
+    - [Mainnets](#mainnets)
+    - [Testnets](#testnets)
   - [Requirements](#requirements)
   - [Steps on live testnet](#steps-on-live-testnet)
   - [Steps on local testnet](#steps-on-local-testnet)
