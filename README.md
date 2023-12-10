@@ -13,7 +13,7 @@ Nodes are compensated in LINK via a subscription billing model. You can see bill
 
 
 ## Table of Contents 📑
-- [Product](#[product](#product-%EF%B8%8F)
+- [Product](#product-%EF%B8%8F)
 - [Challenges we ran into](##challenges-we-ran-into--) 
 - [WebSite](#website)
 - [Code Reference](#code-reference)
